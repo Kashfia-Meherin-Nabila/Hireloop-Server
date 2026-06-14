@@ -39,6 +39,25 @@ async function run() {
     const database = client.db("Hireloop");
     const jobCollection = database.collection("jobs")
 
+    // get job API
+
+    app.get('/api/jobs', async(req, res) =>{
+        const query= {};
+
+        if (req.query.companyId){
+          query.companyId = req.query.companyId;
+        }
+        if(req.query.status){
+          query.status = req.query.status
+        }
+        const cursor = jobCollection.find(query)
+
+        const result = await cursor.toArray();
+        res.send(result)
+    })
+
+
+
     // post a new job API
     app.post('/api/jobs', async(req, res) =>{
         const job= req.body;
